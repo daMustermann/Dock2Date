@@ -51,7 +51,7 @@ jobs:
         push: true
         cache-from: type=gha
         cache-to: type=gha,mode=max
-        tags: localhost:5000/tester/Dock2Date:test
+        tags: localhost:5000/tester/dock2date:test
     - name: Test with Docker
       run: |
         sudo mkdir -p /app/pydock2date/hooks
