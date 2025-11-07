@@ -1,5 +1,5 @@
 
-<img width="800" src="https://raw.githubusercontent.com/gmt2001/Dock2Date/main/assets/Dock2Date_logo_primary_long_cropped.jpg" alt="Dock2Date Logo">
+Dock2Date
 
 Automatically update your running Docker containers to the latest available image.
 
