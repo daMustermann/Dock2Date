@@ -1,10 +1,10 @@
-FROM python:3.13.5-alpine
+FROM python:3.13-alpine
 
 ENV TZ=UTC
 
 WORKDIR /app
 
-COPY /setup.py /ouroboros /README.md /app/
+COPY /setup.py /dock2date /README.md /app/
 
 COPY /requirements.txt /app/
 
@@ -18,12 +18,12 @@ RUN apk update && apk upgrade \
 
 COPY /locales /app/locales
 
-COPY /pyouroboros /app/pyouroboros
+COPY /pydock2date /app/pydock2date
 
 RUN pip install --no-cache-dir .
 
-RUN mkdir /app/pyouroboros/hooks
+RUN mkdir /app/pydock2date/hooks
 
-VOLUME /app/pyouroboros/hooks
+VOLUME /app/pydock2date/hooks
 
-ENTRYPOINT ["ouroboros"]
+ENTRYPOINT ["dock2date"]

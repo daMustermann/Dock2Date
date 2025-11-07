@@ -15,35 +15,35 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 
 
-#: pyouroboros/ouroboros.py:165
+#: pydock2date/Dock2Date.py:165
 msgid "Version: %s-%s"
 msgstr ""
 
-#: pyouroboros/ouroboros.py:168
-msgid "Ouroboros configuration: %s"
+#: pydock2date/Dock2Date.py:168
+msgid "Dock2Date configuration: %s"
 msgstr ""
 
-#: pyouroboros/ouroboros.py:184
+#: pydock2date/Dock2Date.py:184
 msgid "Run Once container update for %s"
 msgstr ""
 
-#: pyouroboros/ouroboros.py:187
+#: pydock2date/Dock2Date.py:187
 msgid "Self Check for %s"
 msgstr ""
 
-#: pyouroboros/ouroboros.py:191
+#: pydock2date/Dock2Date.py:191
 msgid "Cron container update for %s"
 msgstr ""
 
-#: pyouroboros/ouroboros.py:203
+#: pydock2date/Dock2Date.py:203
 msgid "Initial run interval container update for %s"
 msgstr ""
 
-#: pyouroboros/ouroboros.py:207
+#: pydock2date/Dock2Date.py:207
 msgid "Interval container update for %s"
 msgstr ""
 
-#: pyouroboros/ouroboros.py:211
+#: pydock2date/Dock2Date.py:211
 msgid "Could not connect to socket %s. Check your config"
 msgstr ""
 

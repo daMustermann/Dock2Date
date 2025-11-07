@@ -1,9 +1,9 @@
 version: '3'
 services:
-  ouroboros:
-    container_name: ouroboros
-    hostname: ouroboros
-    image: ghcr.io/gmt2001/ouroboros
+  Dock2Date:
+    container_name: Dock2Date
+    hostname: Dock2Date
+    image: ghcr.io/gmt2001/Dock2Date
     environment:
       - CLEANUP=true
       - INTERVAL=300
@@ -15,4 +15,4 @@ services:
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /app/pyouroboros/hooks:/app/pyouroboros/hooks
+      - /app/pydock2date/hooks:/app/pydock2date/hooks
