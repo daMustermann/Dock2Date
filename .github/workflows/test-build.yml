@@ -40,7 +40,7 @@ jobs:
         platforms: linux/amd64
         push: true
         cache-from: type=gha,scope=main
-        tags: localhost:5000/tester/Dock2Date:test
+        tags: localhost:5000/tester/dock2date:test
     - name: Build Docker (main)
       if: github.ref_name == 'main'
       uses: docker/build-push-action@v6
@@ -55,4 +55,4 @@ jobs:
     - name: Test with Docker
       run: |
         sudo mkdir -p /app/pydock2date/hooks
-        docker run --rm --name Dock2Date -v /var/run/docker.sock:/var/run/docker.sock localhost:5000/tester/Dock2Date:test --run-once --dry-run --log-level debug
+        docker run --rm --name Dock2Date -v /var/run/docker.sock:/var/run/docker.sock localhost:5000/tester/dock2date:test --run-once --dry-run --log-level debug
