@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35521.163 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ouroboros", "ouroboros.pyproj", "{D41E6627-82CE-4F97-B788-65FEFA7ED519}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Dock2Date", "Dock2Date.pyproj", "{D41E6627-82CE-4F97-B788-65FEFA7ED519}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

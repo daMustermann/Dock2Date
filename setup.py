@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-from pyouroboros import VERSION
+from pydock2date import VERSION
 
 
 def read(filename):
@@ -14,7 +14,7 @@ def get_requirements(filename="requirements.txt"):
 
 
 setup(
-    name='ouroboros-cli',
+    name='dock2date-cli',
     version=VERSION,
     author='circa10a',
     author_email='caleblemoine@gmail.com',
@@ -22,13 +22,10 @@ setup(
     description='Automatically update running docker containers',
     long_description=read('README.md'),
     long_description_content_type='text/markdown',
-    url='https://github.com/gmt2001/ouroboros',
+    url='https://github.com/gmt2001/Dock2Date',
     license='MIT',
-    classifiers=['Programming Language :: Python',
-                 'Programming Language :: Python :: 3.6',
-                 'Programming Language :: Python :: 3.7'],
-    packages=find_packages(),
-    scripts=['ouroboros'],
+    packages=['pydock2date'],
+    scripts=['dock2date'],
     install_requires=get_requirements(),
     python_requires='>=3.6.2'
 )

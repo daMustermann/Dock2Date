@@ -15,51 +15,51 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 
 
-#: pyouroboros/notifiers.py:42
+#: pydock2date/notifiers.py:42
 msgid "Could not add notifier %s"
 msgstr ""
 
-#: pyouroboros/notifiers.py:49
-msgid "Ouroboros has started"
+#: pydock2date/notifiers.py:49
+msgid "Dock2Date has started"
 msgstr ""
 
-#: pyouroboros/notifiers.py:51
+#: pydock2date/notifiers.py:51
 msgid "Host: %s"
 msgstr ""
 
-#: pyouroboros/notifiers.py:52
+#: pydock2date/notifiers.py:52
 msgid "Time: %s"
 msgstr ""
 
-#: pyouroboros/notifiers.py:53
+#: pydock2date/notifiers.py:53
 msgid "Next Run: %s"
 msgstr ""
 
-#: pyouroboros/notifiers.py:55
-msgid "Ouroboros has detected updates!"
+#: pydock2date/notifiers.py:55
+msgid "Dock2Date has detected updates!"
 msgstr ""
 
-#: pyouroboros/notifiers.py:57
+#: pydock2date/notifiers.py:57
 msgid "Host/Socket: %s / %s"
 msgstr ""
 
-#: pyouroboros/notifiers.py:58
+#: pydock2date/notifiers.py:58
 msgid "Containers Monitored: %d"
 msgstr ""
 
-#: pyouroboros/notifiers.py:59
+#: pydock2date/notifiers.py:59
 msgid "Total Containers Updated: %d"
 msgstr ""
 
-#: pyouroboros/notifiers.py:63
+#: pydock2date/notifiers.py:63
 msgid "{} updated from {} to {}"
 msgstr ""
 
-#: pyouroboros/notifiers.py:71
-msgid "Ouroboros has updated containers!"
+#: pydock2date/notifiers.py:71
+msgid "Dock2Date has updated containers!"
 msgstr ""
 
-#: pyouroboros/notifiers.py:76
+#: pydock2date/notifiers.py:76
 msgid "Containers updated this pass: %d"
 msgstr ""
 
