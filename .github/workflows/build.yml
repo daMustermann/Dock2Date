@@ -40,11 +40,11 @@ jobs:
         push: true
         cache-from: type=gha,scope=main
         cache-to: type=gha,mode=max,scope=main
-        tags: localhost:5000/tester/Dock2Date:test
+        tags: localhost:5000/tester/dock2date:test
     - name: Test with Docker
       run: |
         sudo mkdir -p /app/pydock2date/hooks
-        docker run --rm --name Dock2Date -v /var/run/docker.sock:/var/run/docker.sock localhost:5000/tester/Dock2Date:test --run-once --dry-run --log-level debug
+        docker run --rm --name dock2date -v /var/run/docker.sock:/var/run/docker.sock localhost:5000/tester/dock2date:test --run-once --dry-run --log-level debug
   build:
     name: Docker Build on ubuntu-latest
     runs-on: ubuntu-latest
@@ -119,10 +119,10 @@ jobs:
         cache-from: type=gha,scope=main
         cache-to: type=gha,mode=max,scope=main
         tags: |
-          ${{ secrets.DOCKER_USER }}/Dock2Date:${{ steps.build_env.outputs.branch }}
-          ${{ secrets.DOCKER_USER }}/Dock2Date:latest
-          ghcr.io/${{ github.repository_owner }}/Dock2Date:${{ steps.build_env.outputs.branch }}
-          ghcr.io/${{ github.repository_owner }}/Dock2Date:latest
+          ${{ secrets.DOCKER_USER }}/dock2date:${{ steps.build_env.outputs.branch }}
+          ${{ secrets.DOCKER_USER }}/dock2date:latest
+          ghcr.io/${{ github.repository_owner }}/dock2date:${{ steps.build_env.outputs.branch }}
+          ghcr.io/${{ github.repository_owner }}/dock2date:latest
   cleanup:
     name: Cleanup Cache
     runs-on: ubuntu-latest
