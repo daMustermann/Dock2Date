@@ -247,10 +247,7 @@ class Container(BaseImageObject):
                         continue
 
         except DockerException:
-            self.logger.critical(
-                "Can't connect to Docker API at %s", self.config.docker_socket
-            )
-            exit(1)
+            self.logger.critical("Can't connect to Docker API at %s", self.socket)
 
         return running_containers
 

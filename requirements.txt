@@ -6,3 +6,5 @@ apprise==1.9.5
 apscheduler==3.11.1
 Babel==2.17.0
 pytz==2025.2
+flask==3.0.0
+waitress==3.0.0
