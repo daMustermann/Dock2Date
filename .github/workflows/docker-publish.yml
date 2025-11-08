@@ -61,9 +61,13 @@ jobs:
         echo "Version updated to: $VERSION_TAG"
 
     - name: Debug: show computed image tags
+      env:
+        OWNER: ${{ steps.owner.outputs.owner }}
+        REPO: ${{ steps.repo.outputs.repo }}
+        TAG: ${{ github.event.inputs.tag }}
       run: |
         echo "Computed tags:"
-        echo "ghcr.io/${{ steps.owner.outputs.owner }}/${{ steps.repo.outputs.repo }}:${{ github.event.inputs.tag }}"
+        echo "ghcr.io/$OWNER/$REPO:$TAG"
 
     - name: Build and Push Docker Image
       id: build
@@ -87,9 +91,13 @@ jobs:
 
     - name: Notify on Success
       if: success()
+      env:
+        OWNER: ${{ steps.owner.outputs.owner }}
+        REPO: ${{ steps.repo.outputs.repo }}
+        TAG: ${{ github.event.inputs.tag }}
       run: |
         echo "✅ Docker image published successfully!"
-        echo "📦 Available at: ghcr.io/${{ steps.owner.outputs.owner }}/${{ steps.repo.outputs.repo }}:${{ github.event.inputs.tag }}"
+        echo "📦 Available at: ghcr.io/$OWNER/$REPO:$TAG"
         echo "🌐 Make sure the package is set to public in GitHub settings"
 
     - name: Notify on Failure
