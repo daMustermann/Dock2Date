@@ -76,13 +76,17 @@ jobs:
       run: |
         echo "repo=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2 | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
     - name: Debug: show computed image tags
+      id: compute_tag
       env:
         OWNER: ${{ steps.owner.outputs.owner }}
         REPO: ${{ steps.repo.outputs.repo }}
         BRANCH: ${{ steps.build_env.outputs.branch }}
       run: |
         echo "Computed tags:" 
+        echo "tag_branch=ghcr.io/$OWNER/$REPO:$BRANCH" >> $GITHUB_OUTPUT
+        echo "tag_latest=ghcr.io/$OWNER/$REPO:latest" >> $GITHUB_OUTPUT
         echo "ghcr.io/$OWNER/$REPO:$BRANCH"
+        echo "ghcr.io/$OWNER/$REPO:latest"
     - name: Login to GitHub Container Registry
       uses: docker/login-action@v3
       with:
@@ -106,8 +110,8 @@ jobs:
         cache-from: type=gha,scope=main
         cache-to: type=gha,mode=max,scope=main
         tags: |
-          ghcr.io/${{ steps.owner.outputs.owner }}/${{ steps.repo.outputs.repo }}:${{ steps.build_env.outputs.branch }}
-          ghcr.io/${{ steps.owner.outputs.owner }}/${{ steps.repo.outputs.repo }}:latest
+          ${{ steps.compute_tag.outputs.tag_branch }}
+          ${{ steps.compute_tag.outputs.tag_latest }}
   cleanup:
     name: Cleanup Cache
     runs-on: ubuntu-latest

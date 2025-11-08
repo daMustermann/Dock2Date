@@ -61,12 +61,14 @@ jobs:
         echo "Version updated to: $VERSION_TAG"
 
     - name: Debug: show computed image tags
+      id: compute_tag
       env:
         OWNER: ${{ steps.owner.outputs.owner }}
         REPO: ${{ steps.repo.outputs.repo }}
         TAG: ${{ github.event.inputs.tag }}
       run: |
         echo "Computed tags:"
+        echo "tag=ghcr.io/$OWNER/$REPO:$TAG" >> $GITHUB_OUTPUT
         echo "ghcr.io/$OWNER/$REPO:$TAG"
 
     - name: Build and Push Docker Image
@@ -80,12 +82,12 @@ jobs:
         cache-from: type=gha,scope=main
         cache-to: type=gha,mode=max,scope=main
         tags: |
-          ghcr.io/${{ steps.owner.outputs.owner }}/${{ steps.repo.outputs.repo }}:${{ github.event.inputs.tag }}
+          ${{ steps.compute_tag.outputs.tag }}
 
     - name: Generate artifact attestation
       uses: actions/attest-build-provenance@v1
       with:
-        subject-name: ghcr.io/${{ steps.owner.outputs.owner }}/${{ steps.repo.outputs.repo }}:${{ github.event.inputs.tag }}
+        subject-name: ${{ steps.compute_tag.outputs.tag }}
         subject-digest: ${{ steps.build.outputs.digest }}
         push-to-registry: true
 
