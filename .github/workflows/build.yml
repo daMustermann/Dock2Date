@@ -77,12 +77,11 @@ jobs:
         echo "repo=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2 | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
     - name: Debug: show computed image tags
       id: compute_tag
-      env:
-        OWNER: ${{ steps.owner.outputs.owner }}
-        REPO: ${{ steps.repo.outputs.repo }}
-        BRANCH: ${{ steps.build_env.outputs.branch }}
       run: |
-        echo "Computed tags:" 
+        OWNER=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1 | tr '[:upper:]' '[:lower:]')
+        REPO=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2 | tr '[:upper:]' '[:lower:]')
+        BRANCH=$(echo $GITHUB_REF | sed 's/refs\/heads\///' | sed 's/refs\/tags\///')
+        echo "Computed tags:"
         echo "tag_branch=ghcr.io/$OWNER/$REPO:$BRANCH" >> $GITHUB_OUTPUT
         echo "tag_latest=ghcr.io/$OWNER/$REPO:latest" >> $GITHUB_OUTPUT
         echo "ghcr.io/$OWNER/$REPO:$BRANCH"
