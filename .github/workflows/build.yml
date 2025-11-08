@@ -75,7 +75,7 @@ jobs:
       id: repo
       run: |
         echo "repo=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2 | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
-    - name: Debug: show computed image tags
+      - name: Debug: show computed image tags
       id: compute_tag
       run: |
         OWNER=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1 | tr '[:upper:]' '[:lower:]')
