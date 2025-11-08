@@ -4,25 +4,24 @@ ENV TZ=UTC
 
 WORKDIR /app
 
-COPY /setup.py /dock2date /README.md /app/
-
-COPY /requirements.txt /app/
-
+# Install build dependencies that are needed for pip install
 RUN apk update && apk upgrade \
     && apk add --no-cache --virtual .build-deps gcc build-base linux-headers \
-    ca-certificates musl-dev python3-dev libffi-dev openssl-dev cargo \
-    && pip install --upgrade pip \
-    && pip install --upgrade setuptools \
-    && pip install --no-cache-dir -r requirements.txt \
-    && apk del .build-deps
+    ca-certificates musl-dev python3-dev libffi-dev openssl-dev cargo
 
-COPY /locales /app/locales
+# Install Python dependencies first to leverage Docker cache
+COPY requirements.txt .
+RUN pip install --upgrade pip setuptools \
+    && pip install --no-cache-dir -r requirements.txt
 
-COPY /pydock2date /app/pydock2date
+# Copy the rest of the application source code
+COPY . .
 
-COPY /web /app/web
+# Install the application
+RUN pip install -v --no-cache-dir .
 
-RUN pip install --no-cache-dir .
+# Clean up build dependencies
+RUN apk del .build-deps
 
 RUN mkdir /app/pydock2date/hooks
 
