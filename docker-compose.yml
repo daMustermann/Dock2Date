@@ -3,7 +3,7 @@ services:
   Dock2Date:
     container_name: Dock2Date
     hostname: Dock2Date
-    image: ghcr.io/gmt2001/Dock2Date
+    image: ghcr.io/daMustermann/Dock2Date
     environment:
       - CLEANUP=true
       - INTERVAL=300

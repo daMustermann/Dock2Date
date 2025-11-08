@@ -5,7 +5,7 @@ Automatically update your running Docker containers to the latest available imag
 The de-facto standard for docker update automation
 
 [![GitHub Release](https://img.shields.io/github/v/release/daMustermann/Dock2Date)](https://github.com/daMustermann/Dock2Date/releases)
-[![Docker Pulls](https://img.shields.io/docker/pulls/ghcr.io/gmt2001/Dock2Date)](https://hub.docker.com/r/ghcr.io/gmt2001/Dock2Date)
+[![Docker Pulls](https://img.shields.io/docker/pulls/ghcr.io/daMustermann/Dock2Date)](https://hub.docker.com/r/ghcr.io/daMustermann/Dock2Date)
 [![License](https://img.shields.io/github/license/daMustermann/Dock2Date)](https://github.com/daMustermann/Dock2Date/blob/main/LICENSE)
 
 ## Overview
@@ -38,7 +38,7 @@ docker run -d --name Dock2Date \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -p 9999:9999 \
   -e WEB=true \
-  ghcr.io/gmt2001/Dock2Date
+  ghcr.io/daMustermann/Dock2Date
 ```
 
 **Access the web UI at: http://localhost:9999**
@@ -49,7 +49,7 @@ docker run -d --name Dock2Date \
 version: '3'
 services:
   dock2date:
-    image: ghcr.io/gmt2001/Dock2Date
+    image: ghcr.io/daMustermann/Dock2Date
     environment:
       - WEB=true
     volumes:
@@ -114,7 +114,7 @@ docker run -d --name Dock2Date \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -p 9999:9999 \
   -e WEB=true \
-  ghcr.io/gmt2001/Dock2Date
+  ghcr.io/daMustermann/Dock2Date
 
 # Open http://localhost:9999
 # Configure monitoring in the web interface
@@ -127,7 +127,7 @@ docker run -d --name Dock2Date \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -p 9999:9999 \
   -e WEB=true \
-  ghcr.io/gmt2001/Dock2Date
+  ghcr.io/daMustermann/Dock2Date
 
 # Configure Discord notifications in web UI
 # Add webhook URL: discord://your-webhook-url
@@ -141,7 +141,7 @@ docker run -d --name Dock2Date \
   -p 9999:9999 \
   -e WEB=true \
   -e SWARM=true \
-  ghcr.io/gmt2001/Dock2Date
+  ghcr.io/daMustermann/Dock2Date
 ```
 
 ## Architecture
