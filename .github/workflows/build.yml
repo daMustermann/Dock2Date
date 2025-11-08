@@ -1,125 +1,35 @@
-name: Build
+name: Build and Test
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - main
 
 jobs:
-  test:
-    name: Docker Test on ubuntu-latest
+  build_and_test:
+    name: Build and Test Docker Image
     runs-on: ubuntu-latest
-    services:
-      registry:
-        image: registry:2
-        ports:
-          - 5000:5000
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 1
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
-      with:
-        platforms: amd64
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-      with:
-        version: latest
-        driver-opts: network=host
-    - name: Update Version String
-      run: |
-        sed -i -r 's/VERSION = "custom"/VERSION = "0.0+test"/' pydock2date/__init__.py
-        echo $?\
-    - name: Build Docker
-      uses: docker/build-push-action@v6
-      with:
-        context: .
-        file: ./Dockerfile
-        platforms: linux/amd64
-        push: true
-        cache-from: type=gha,scope=main
-        cache-to: type=gha,mode=max,scope=main
-        tags: localhost:5000/tester/dock2date:test
-    - name: Test with Docker
-      run: |
-        sudo mkdir -p /app/pydock2date/hooks
-        docker run --rm --name Dock2Date -v /var/run/docker.sock:/var/run/docker.sock localhost:5000/tester/dock2date:test --run-once --dry-run --log-level debug
-  build:
-    name: Docker Build on ubuntu-latest
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 1
-    - name: Get Revision Variables
-      id: build_env
-      run: |
-        echo ${GITHUB_REF:10}
-        echo "branch=${GITHUB_REF:10}" >> $GITHUB_OUTPUT
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
-      with:
-        platforms: amd64,arm64,arm
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-      with:
-        version: latest
-    - name: Normalize repository owner to lowercase
-      id: owner
-      run: |
-        echo "owner=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1 | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
-    - name: Normalize repository name to lowercase
-      id: repo
-      run: |
-        echo "repo=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2 | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
-    # Debug step removed to avoid YAML validation errors in editors
-    - name: Login to GitHub Container Registry
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ steps.owner.outputs.owner }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-        logout: true
-    - name: Update Version String
-      env:
-        Dock2Date_VERSION: ${{ steps.build_env.outputs.branch }}
-      run: |
-        sed -i -r 's/VERSION = "custom"/VERSION = "'$Dock2Date_VERSION'"/' pydock2date/__init__.py
-        echo $?\
-    - name: Build and Push Docker
-      uses: docker/build-push-action@v6
-      with:
-        context: .
-        file: ./Dockerfile
-        platforms: linux/amd64,linux/arm64,linux/arm/v7
-        push: true
-        cache-from: type=gha,scope=main
-        cache-to: type=gha,mode=max,scope=main
-        tags: |
-          ghcr.io/${{ steps.owner.outputs.owner }}/${{ steps.repo.outputs.repo }}:${{ steps.build_env.outputs.branch }}
-          ghcr.io/${{ steps.owner.outputs.owner }}/${{ steps.repo.outputs.repo }}:latest
-  cleanup:
-    name: Cleanup Cache
-    runs-on: ubuntu-latest
-    needs: [test, build]
-    steps:
-    - name: Cleanup Cache
-      run: |
-        gh extension install actions/gh-actions-cache
-        REPO="${{ github.repository }}"
-        BRANCH="${{ github.ref }}"
-        echo "Fetching list of cache keys"
-        cacheKeys=$(gh actions-cache list -R $REPO -B $BRANCH | cut -f 1 )
-        ## Setting this to not fail the workflow while deleting cache keys.
-        set +e
-        echo "Deleting caches..."
-        for cacheKey in $cacheKeys
-        do
-            gh actions-cache delete $cacheKey -R $REPO -B $BRANCH --confirm
-        done
-        echo "Done"
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          load: true
+          tags: dock2date:latest
+          cache-from: type=gha,scope=main
+          cache-to: type=gha,mode=max,scope=main
+
+      - name: Test Docker Image
+        run: |
+          docker run --rm dock2date:latest --help
