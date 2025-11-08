@@ -25,7 +25,7 @@ setup(
     long_description_content_type='text/markdown',
     url='https://github.com/damustermann/Dock2Date',
     license='MIT',
-    packages=['pydock2date', 'web'],
+    packages=find_packages(),
     scripts=['dock2date'],
     install_requires=get_requirements(),
     python_requires='>=3.6.2'
