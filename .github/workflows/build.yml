@@ -71,7 +71,7 @@ jobs:
       uses: docker/login-action@v3
       with:
         registry: ghcr.io
-        username: ${{ github.repository_owner }}
+        username: damustermann
         password: ${{ secrets.GITHUB_TOKEN }}
         logout: true
     - name: Update Version String
@@ -90,8 +90,8 @@ jobs:
         cache-from: type=gha,scope=main
         cache-to: type=gha,mode=max,scope=main
         tags: |
-          ghcr.io/${{ github.repository_owner }}/Dock2Date:${{ steps.build_env.outputs.branch }}
-          ghcr.io/${{ github.repository_owner }}/Dock2Date:latest
+          ghcr.io/damustermann/Dock2Date:${{ steps.build_env.outputs.branch }}
+          ghcr.io/damustermann/Dock2Date:latest
   cleanup:
     name: Cleanup Cache
     runs-on: ubuntu-latest
