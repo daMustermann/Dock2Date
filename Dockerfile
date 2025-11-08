@@ -20,6 +20,8 @@ COPY /locales /app/locales
 
 COPY /pydock2date /app/pydock2date
 
+COPY /web /app/web
+
 RUN pip install --no-cache-dir .
 
 RUN mkdir /app/pydock2date/hooks
