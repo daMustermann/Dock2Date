@@ -4,9 +4,9 @@ ENV TZ=UTC
 
 WORKDIR /app
 
-COPY /setup.py /dock2date /README.md /app/
+COPY setup.py dock2date README.md /app/
 
-COPY /requirements.txt /app/
+COPY requirements.txt /app/
 
 RUN apk update && apk upgrade \
     && apk add --no-cache --virtual .build-deps gcc build-base linux-headers \
@@ -16,13 +16,13 @@ RUN apk update && apk upgrade \
     && pip install --no-cache-dir -r requirements.txt \
     && apk del .build-deps
 
-COPY /locales /app/locales
+COPY locales /app/locales
 
-COPY /pydock2date /app/pydock2date
+COPY pydock2date /app/pydock2date
 
-COPY /web /app/web
+COPY web /app/web
 
-RUN pip install --no-cache-dir .
+RUN pip install -v --no-cache-dir .
 
 RUN mkdir /app/pydock2date/hooks
 
