@@ -191,7 +191,7 @@ dock2date -tz Asia/Tokyo -w
 version: '3'
 services:
   dock2date:
-    image: ghcr.io/daMustermann/Dock2Date
+    image: ghcr.io/damustermann/Dock2Date
     environment:
       - WEB=true
     volumes:
@@ -206,7 +206,7 @@ services:
 version: '3'
 services:
   dock2date:
-    image: ghcr.io/daMustermann/Dock2Date
+    image: ghcr.io/damustermann/Dock2Date
     environment:
       - WEB=true
       - INTERVAL=600

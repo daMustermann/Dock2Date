@@ -28,14 +28,14 @@ class NotificationManager(object):
 
     def build_apprise(self):
         asset = apprise.AppriseAsset(
-            image_url_mask="https://raw.githubusercontent.com/daMustermann/Dock2Date/main/assets/Dock2Date_logo_icon_72.png",
+            image_url_mask="https://raw.githubusercontent.com/damustermann/Dock2Date/main/assets/Dock2Date_logo_icon_72.png",
             default_extension=".png",
         )
         asset.app_id = "Dock2Date"
         asset.app_desc = "Dock2Date"
-        asset.app_url = "https://github.com/daMustermann/Dock2Date"
+        asset.app_url = "https://github.com/damustermann/Dock2Date"
         asset.html_notify_map["info"] = "#5F87C6"
-        asset.image_url_logo = "https://raw.githubusercontent.com/daMustermann/Dock2Date/main/assets/Dock2Date_logo_icon_256.png"
+        asset.image_url_logo = "https://raw.githubusercontent.com/damustermann/Dock2Date/main/assets/Dock2Date_logo_icon_256.png"
 
         apprise_obj = apprise.Apprise(asset=asset)
 
