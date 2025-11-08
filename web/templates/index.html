@@ -1,28 +1,316 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Dock2Date</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dock2Date - Docker Container Management</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Running Containers</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Image</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for container in containers %}
-            <tr>
-                <td>{{ container.name }}</td>
-                <td>{{ container.image.tags[0] if container.image.tags else '' }}</td>
-                <td>{{ container.status }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="bg-shape shape-1"></div>
+        <div class="bg-shape shape-2"></div>
+        <div class="bg-shape shape-3"></div>
+        <div class="bg-shape shape-4"></div>
+        <div class="bg-shape shape-5"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="glass-header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-docker"></i>
+                <h1>Dock2Date</h1>
+            </div>
+            <div class="header-controls">
+                <button class="btn-neon" id="settings-btn">
+                    <i class="fas fa-cog"></i> Settings
+                </button>
+                <button class="btn-neon" id="refresh-btn">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <main class="dashboard">
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card glass-card">
+                <div class="stat-icon">
+                    <i class="fas fa-server"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="total-containers">--</h3>
+                    <p>Total Containers</p>
+                </div>
+            </div>
+            <div class="stat-card glass-card">
+                <div class="stat-icon">
+                    <i class="fas fa-play-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="running-containers">--</h3>
+                    <p>Running</p>
+                </div>
+            </div>
+            <div class="stat-card glass-card">
+                <div class="stat-icon">
+                    <i class="fas fa-stop-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="stopped-containers">--</h3>
+                    <p>Stopped</p>
+                </div>
+            </div>
+            <div class="stat-card glass-card">
+                <div class="stat-icon">
+                    <i class="fas fa-arrow-up"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="updates-available">--</h3>
+                    <p>Updates Available</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Containers Section -->
+        <section class="section glass-card">
+            <div class="section-header">
+                <h2><i class="fas fa-box"></i> Containers</h2>
+                <div class="section-controls">
+                    <select id="container-filter" class="glass-select">
+                        <option value="all">All Containers</option>
+                        <option value="running">Running Only</option>
+                        <option value="stopped">Stopped Only</option>
+                    </select>
+                </div>
+            </div>
+            <div class="containers-grid" id="containers-grid">
+                <!-- Containers will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Configuration Section -->
+        <section class="section glass-card" id="config-section" style="display: none;">
+            <div class="section-header">
+                <h2><i class="fas fa-cogs"></i> Configuration</h2>
+                <button class="btn-close" id="close-config-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="config-tabs">
+                <button class="tab-btn active" data-tab="general">General</button>
+                <button class="tab-btn" data-tab="docker">Docker</button>
+                <button class="tab-btn" data-tab="notifications">Notifications</button>
+                <button class="tab-btn" data-tab="metrics">Metrics</button>
+            </div>
+            <div class="config-content">
+                <!-- General Tab -->
+                <div class="config-tab active" id="general-tab">
+                    <div class="config-group">
+                        <h3>Core Settings</h3>
+                        <div class="config-row">
+                            <label for="interval">Check Interval (seconds)</label>
+                            <input type="number" id="interval" class="glass-input" value="300">
+                        </div>
+                        <div class="config-row">
+                            <label for="log-level">Log Level</label>
+                            <select id="log-level" class="glass-select">
+                                <option value="debug">Debug</option>
+                                <option value="info" selected>Info</option>
+                                <option value="warn">Warning</option>
+                                <option value="error">Error</option>
+                                <option value="critical">Critical</option>
+                            </select>
+                        </div>
+                        <div class="config-row">
+                            <label for="timezone">Timezone</label>
+                            <input type="text" id="timezone" class="glass-input" value="UTC">
+                        </div>
+                        <div class="config-row">
+                            <label for="language">Language</label>
+                            <select id="language" class="glass-select">
+                                <option value="en" selected>English</option>
+                                <option value="es">Español</option>
+                                <option value="fr">Français</option>
+                                <option value="de">Deutsch</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="config-group">
+                        <h3>Behavior</h3>
+                        <div class="config-row checkbox-row">
+                            <input type="checkbox" id="self-update" class="glass-checkbox">
+                            <label for="self-update">Self Update</label>
+                        </div>
+                        <div class="config-row checkbox-row">
+                            <input type="checkbox" id="cleanup" class="glass-checkbox">
+                            <label for="cleanup">Cleanup Old Images</label>
+                        </div>
+                        <div class="config-row checkbox-row">
+                            <input type="checkbox" id="dry-run" class="glass-checkbox">
+                            <label for="dry-run">Dry Run Mode</label>
+                        </div>
+                        <div class="config-row checkbox-row">
+                            <input type="checkbox" id="monitor-only" class="glass-checkbox">
+                            <label for="monitor-only">Monitor Only</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Docker Tab -->
+                <div class="config-tab" id="docker-tab">
+                    <div class="config-group">
+                        <h3>Docker Settings</h3>
+                        <div class="config-row">
+                            <label for="docker-sockets">Docker Sockets</label>
+                            <input type="text" id="docker-sockets" class="glass-input" value="unix://var/run/docker.sock" placeholder="socket1 socket2">
+                        </div>
+                        <div class="config-row">
+                            <label for="docker-timeout">Timeout (seconds)</label>
+                            <input type="number" id="docker-timeout" class="glass-input" value="60">
+                        </div>
+                        <div class="config-row checkbox-row">
+                            <input type="checkbox" id="swarm" class="glass-checkbox">
+                            <label for="swarm">Swarm Mode</label>
+                        </div>
+                        <div class="config-row checkbox-row">
+                            <input type="checkbox" id="label-enable" class="glass-checkbox">
+                            <label for="label-enable">Enable Label Monitoring</label>
+                        </div>
+                        <div class="config-row checkbox-row">
+                            <input type="checkbox" id="labels-only" class="glass-checkbox">
+                            <label for="labels-only">Labels Only</label>
+                        </div>
+                    </div>
+                    <div class="config-group">
+                        <h3>Container Filters</h3>
+                        <div class="config-row">
+                            <label for="monitor">Monitor Containers</label>
+                            <input type="text" id="monitor" class="glass-input" placeholder="container1 container2">
+                        </div>
+                        <div class="config-row">
+                            <label for="ignore">Ignore Containers</label>
+                            <input type="text" id="ignore" class="glass-input" placeholder="container1 container2">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Tab -->
+                <div class="config-tab" id="notifications-tab">
+                    <div class="config-group">
+                        <h3>Notification Services</h3>
+                        <div id="notifiers-list">
+                            <!-- Notifiers will be loaded here -->
+                        </div>
+                        <button class="btn-neon btn-small" id="add-notifier-btn">
+                            <i class="fas fa-plus"></i> Add Notifier
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Metrics Tab -->
+                <div class="config-tab" id="metrics-tab">
+                    <div class="config-group">
+                        <h3>Metrics Export</h3>
+                        <div class="config-row">
+                            <label for="data-export">Export Type</label>
+                            <select id="data-export" class="glass-select">
+                                <option value="">Disabled</option>
+                                <option value="prometheus">Prometheus</option>
+                                <option value="influxdb">InfluxDB</option>
+                            </select>
+                        </div>
+                        <div class="prometheus-settings" style="display: none;">
+                            <div class="config-row">
+                                <label for="prometheus-addr">Bind Address</label>
+                                <input type="text" id="prometheus-addr" class="glass-input" value="127.0.0.1">
+                            </div>
+                            <div class="config-row">
+                                <label for="prometheus-port">Port</label>
+                                <input type="number" id="prometheus-port" class="glass-input" value="8000">
+                            </div>
+                        </div>
+                        <div class="influxdb-settings" style="display: none;">
+                            <div class="config-row">
+                                <label for="influx-url">URL</label>
+                                <input type="text" id="influx-url" class="glass-input" value="127.0.0.1">
+                            </div>
+                            <div class="config-row">
+                                <label for="influx-port">Port</label>
+                                <input type="number" id="influx-port" class="glass-input" value="8086">
+                            </div>
+                            <div class="config-row">
+                                <label for="influx-username">Username</label>
+                                <input type="text" id="influx-username" class="glass-input" value="root">
+                            </div>
+                            <div class="config-row">
+                                <label for="influx-password">Password</label>
+                                <input type="password" id="influx-password" class="glass-input" value="root">
+                            </div>
+                            <div class="config-row">
+                                <label for="influx-database">Database</label>
+                                <input type="text" id="influx-database" class="glass-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="config-actions">
+                <button class="btn-neon" id="save-config-btn">
+                    <i class="fas fa-save"></i> Save Configuration
+                </button>
+                <button class="btn-secondary" id="reset-config-btn">
+                    <i class="fas fa-undo"></i> Reset
+                </button>
+            </div>
+        </section>
+
+        <!-- Logs Section -->
+        <section class="section glass-card">
+            <div class="section-header">
+                <h2><i class="fas fa-terminal"></i> Recent Logs</h2>
+                <button class="btn-neon btn-small" id="refresh-logs-btn">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+            <div class="logs-container" id="logs-container">
+                <!-- Logs will be loaded here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <div class="modal" id="notifier-modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3>Add Notifier</h3>
+                <button class="btn-close" id="close-notifier-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="config-row">
+                    <label for="notifier-url">Notifier URL</label>
+                    <input type="text" id="notifier-url" class="glass-input" placeholder="discord://token/channel or mailto://user:pass@email.com">
+                </div>
+                <div class="config-row">
+                    <label for="notifier-name">Name (optional)</label>
+                    <input type="text" id="notifier-name" class="glass-input" placeholder="My Discord">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-neon" id="save-notifier-btn">Add Notifier</button>
+                <button class="btn-secondary" id="cancel-notifier-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

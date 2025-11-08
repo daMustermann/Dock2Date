@@ -453,7 +453,8 @@ def main():
     if config.web:
         web_app.config['DOCKER_CLIENTS'] = docker_clients
         web_app.config['DATA_MANAGER'] = data_manager
-        web_thread = threading.Thread(target=lambda: serve(web_app, host='0.0.0.0', port=5000))
+        web_app.config['CONFIG'] = config
+        web_thread = threading.Thread(target=lambda: serve(web_app, host='0.0.0.0', port=9999))
         web_thread.daemon = True
         web_thread.start()
 
@@ -463,7 +464,7 @@ def main():
         next_run = scheduler.get_jobs()[0].next_run_time
     else:
         now = datetime.now(timezone("UTC")).astimezone()
-        next_run = now + timedelta(0, config.interval)
+        next_run = now + timedelta(0, config.interval or 300)
 
     if not config.skip_startup_notifications:
         notification_manager.send(kind="startup", next_run=next_run)

@@ -16,3 +16,5 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /app/pydock2date/hooks:/app/pydock2date/hooks
+    ports:
+      - "9999:9999"  # Web UI port (if WEB=true)

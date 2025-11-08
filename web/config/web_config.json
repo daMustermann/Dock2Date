@@ -1,0 +1,7 @@
+{
+  "theme": "dark",
+  "autoRefresh": true,
+  "refreshInterval": 30,
+  "showAnimations": true,
+  "compactView": false
+}
