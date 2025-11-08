@@ -24,7 +24,7 @@ setup(
     long_description_content_type='text/markdown',
     url='https://github.com/gmt2001/Dock2Date',
     license='MIT',
-    packages=['pydock2date'],
+    packages=['pydock2date', 'web'],
     scripts=['dock2date'],
     install_requires=get_requirements(),
     python_requires='>=3.6.2'
