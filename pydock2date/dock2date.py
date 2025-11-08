@@ -1,4 +1,5 @@
 import gettext
+import threading
 
 from time import sleep
 from os import environ
@@ -8,6 +9,7 @@ from datetime import datetime, timedelta
 from argparse import ArgumentParser, RawTextHelpFormatter
 from apscheduler.schedulers.background import BackgroundScheduler
 from pytz import timezone
+from waitress import serve
 
 from pydock2date.config import Config
 from pydock2date import VERSION, BRANCH
@@ -15,6 +17,7 @@ from pydock2date.logger import Dock2DateLogger
 from pydock2date.dataexporters import DataManager
 from pydock2date.notifiers import NotificationManager
 from pydock2date.dockerclient import Docker, Container, Service
+from web.app import app as web_app
 
 
 def main():
@@ -155,6 +158,15 @@ def main():
         default=Config.tz,
         dest="TZ",
         help="Set the timezone of notifications and cron\nDEFAULT: UTC",
+    )
+
+    core_group.add_argument(
+        "-w",
+        "--web",
+        default=Config.web,
+        dest="WEB",
+        action="store_true",
+        help="Enable the web UI\nDEFAULT: False",
     )
 
     docker_group = parser.add_argument_group(
@@ -387,9 +399,11 @@ def main():
     scheduler = BackgroundScheduler()
     scheduler.start()
 
+    docker_clients = {}
     for socket in config.docker_sockets:
         try:
             docker = Docker(socket, config, data_manager, notification_manager)
+            docker_clients[socket] = docker
             if config.swarm:
                 mode = Service(docker)
             else:
@@ -435,6 +449,13 @@ def main():
             ol.logger.error(
                 _("Could not connect to socket %s. Check your config"), socket
             )
+
+    if config.web:
+        web_app.config['DOCKER_CLIENTS'] = docker_clients
+        web_app.config['DATA_MANAGER'] = data_manager
+        web_thread = threading.Thread(target=lambda: serve(web_app, host='0.0.0.0', port=5000))
+        web_thread.daemon = True
+        web_thread.start()
 
     if config.run_once:
         next_run = None

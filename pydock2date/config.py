@@ -44,9 +44,11 @@ class Config(object):
         "DOCKER_TIMEOUT",
         "LATEST_ONLY",
         "SAVE_COUNTERS",
+        "WEB",
     ]
 
     hostname = environ.get("HOSTNAME")
+    web = False
     interval = 300
     cron = None
     docker_sockets = "unix://var/run/docker.sock"

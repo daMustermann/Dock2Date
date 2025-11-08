@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dock2Date</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Running Containers</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for container in containers %}
+            <tr>
+                <td>{{ container.name }}</td>
+                <td>{{ container.image.tags[0] if container.image.tags else '' }}</td>
+                <td>{{ container.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
